@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-type Delay = number;
+export type Delay = number;
 
-type ComplexDelay = Delay | [Delay?, Delay?];
+export type ComplexDelay = Delay | [Delay?, Delay?];
 
 type Options = {
-  living?: boolean;
+  on?: boolean;
   delay?: ComplexDelay;
 };
 
@@ -17,21 +17,18 @@ const expandDelay = (delay: ComplexDelay) => {
   }
 };
 
-export const useShortLived = ({
-  living = false,
-  delay = 0,
-}: Options): boolean => {
+export const useShortLived = ({ on = false, delay = 0 }: Options): boolean => {
   const [beforeDelay, endDelay] = expandDelay(delay);
 
-  const [alive, setAlive] = useState(living);
+  const [delayedOn, setDelayedOn] = useState(on);
 
   useEffect(() => {
     const timer = setTimeout(
-      () => void setAlive(living),
-      living ? beforeDelay : endDelay
+      () => void setDelayedOn(on),
+      on ? beforeDelay : endDelay
     );
     return () => clearTimeout(timer);
-  }, [living, beforeDelay, endDelay]);
+  }, [on, beforeDelay, endDelay]);
 
-  return alive;
+  return delayedOn;
 };
