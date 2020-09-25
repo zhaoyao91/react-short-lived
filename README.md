@@ -6,17 +6,17 @@ Help maintain short-lived React component.
 
 Some components, such as modal, pop menu and drawer, are short-lived, which means they may exist for long but will
 only be alive for a short time. Some of them hold a lot of data and state. We wish a fresh version of them when they
-come to alive, but want to clean them after they are truly dead.
+come to alive, but want to clean them after they are totally dead.
 
 ## How it works
 
-This package expose a component `ShortLived` of render props pattern. You set up the delay times, turn it on and off, the
-render function with give you an `alive` as a hint, which you can use as `visible` or `open` prop for the inner component.
+This package exposes a component `ShortLived` of render props pattern. You just set up the delay times, turn it on and off, the
+render function will give you an `alive` as a hint, which you can use as `visible` or `open` prop for the inner component.
 After some time of being not alive, the inner component will be cleaned.
 
 ![Lifetime](https://user-images.githubusercontent.com/3808838/94229083-16d8aa80-ff31-11ea-8443-c28e204471e7.jpeg)
 
-As the picture above, you only control `on` and `delay`, this package will manage `delayed on`, and, during `living`, your
+As the picture above shows, you only control `on` and `delay`, this package will manage `delayed on`, and, during `living`, your
 inner component is mounted, and during `alive`, your inner component should be alive/visible/open.
 
 ## Install
