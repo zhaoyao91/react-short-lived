@@ -1,9 +1,9 @@
 {
-  "name": "react-short-alived",
+  "name": "react-short-lived",
   "version": "0.1.0",
-  "author": "赵耀",
+  "author": "zhaoyao91",
   "main": "dist/index.js",
-  "module": "dist/react-short-alived.esm.js",
+  "module": "dist/react-short-lived.esm.js",
   "typings": "dist/index.d.ts",
   "license": "MIT",
   "files": [
@@ -34,11 +34,11 @@
   },
   "size-limit": [
     {
-      "path": "dist/react-short-alived.cjs.production.min.js",
+      "path": "dist/react-short-lived.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/react-short-alived.esm.js",
+      "path": "dist/react-short-lived.esm.js",
       "limit": "10 KB"
     }
   ],
