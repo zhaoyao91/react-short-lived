@@ -1,5 +1,6 @@
 {
   "name": "react-short-lived",
+  "description": "Help maintain short-lived React component.",
   "version": "0.1.0",
   "author": "zhaoyao91",
   "main": "dist/index.js",

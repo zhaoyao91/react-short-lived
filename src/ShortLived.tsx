@@ -28,7 +28,7 @@ export const ShortLived: FC<Props> = ({
 
   if (living) {
     return (
-      <Fragment key={version ?? versionRef.current}>
+      <Fragment key={getVersion(version, versionRef.current)}>
         {render?.(alive) ?? null}
       </Fragment>
     );
@@ -36,3 +36,11 @@ export const ShortLived: FC<Props> = ({
 
   return null;
 };
+
+function getVersion(
+  userVersion?: number | string,
+  innerVersion?: number | string
+) {
+  if (userVersion == null) return innerVersion;
+  else return '_' + userVersion;
+}
