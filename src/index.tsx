@@ -1,2 +1,5 @@
-export { useShortLived } from './use-short-lived';
-export { ShortLived } from './ShortLived';
+import { ShortLived } from './ShortLived';
+
+export { ShortLived };
+
+export default ShortLived;
