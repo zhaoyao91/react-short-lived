@@ -24,7 +24,8 @@ export const demo = () => {
       <p>on: {String(on)}</p>
       <ShortLived
         on={on}
-        delay={[500, 1000]}
+        delayStart={500}
+        delayEnd={1000}
         render={alive => <Demo alive={alive} />}
       />
     </div>
