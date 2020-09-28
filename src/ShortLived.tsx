@@ -114,20 +114,23 @@ function getVersion(
   else return '_' + userVersion;
 }
 
-function useChanged(value: any) {
-  const previousValue = useRef(value);
-  const prevValue = previousValue.current;
-  const changed = prevValue !== value;
-  previousValue.current = value;
-  return changed;
-}
-
-// keep version inc by on in render invocation
+// keep a version which increases on each toggling to true of `on`
 function useVersion(on: boolean) {
-  const onChanged = useChanged(on);
-  const versionRef = useRef(0);
-  if (onChanged && on) {
-    versionRef.current++;
-  }
-  return versionRef.current;
+  const prevOnRef = useRef(on);
+  const prevVersionRef = useRef(0);
+
+  const turnedOn = !prevOnRef.current && on;
+  const version = turnedOn
+    ? prevVersionRef.current + 1
+    : prevVersionRef.current;
+
+  useEffect(() => {
+    prevOnRef.current = on;
+  }, [on]);
+
+  useEffect(() => {
+    prevVersionRef.current = version;
+  }, [version]);
+
+  return version;
 }
