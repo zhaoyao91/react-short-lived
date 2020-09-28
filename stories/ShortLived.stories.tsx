@@ -31,7 +31,7 @@ export const demo = () => {
   );
 };
 
-const Demo = ({ alive }) => {
+const Demo = ({ alive }: any) => {
   useEffect(() => {
     console.log('mount');
   }, []);

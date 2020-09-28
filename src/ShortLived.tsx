@@ -1,5 +1,15 @@
-import React, { Fragment, FC, ReactElement, useRef } from 'react';
-import { ComplexDelay, useShortLived } from './use-short-lived';
+import React, {
+  Fragment,
+  FC,
+  ReactElement,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
+
+export type Delay = number;
+
+export type ComplexDelay = Delay | [Delay?, Delay?];
 
 type Props = {
   on?: boolean;
@@ -10,11 +20,20 @@ type Props = {
 
 export const ShortLived: FC<Props> = ({
   on = false,
-  delay,
+  delay = 0,
   render,
   version,
 }) => {
-  const delayedOn = useShortLived({ on, delay });
+  const [beforeDelay, endDelay] = expandDelay(delay);
+  const [delayedOn, setDelayedOn] = useState(on);
+
+  useEffect(() => {
+    const timer = setTimeout(
+      () => void setDelayedOn(on),
+      on ? beforeDelay : endDelay
+    );
+    return () => clearTimeout(timer);
+  }, [on, beforeDelay, endDelay]);
 
   const previousOnRef = useRef(on);
   const versionRef = useRef(0);
@@ -44,3 +63,11 @@ function getVersion(
   if (userVersion == null) return innerVersion;
   else return '_' + userVersion;
 }
+
+const expandDelay = (delay: ComplexDelay) => {
+  if (Array.isArray(delay)) {
+    return [delay[0] ?? 0, delay[1] ?? 0];
+  } else {
+    return [delay ?? 0, delay ?? 0];
+  }
+};
