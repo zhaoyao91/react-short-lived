@@ -58,18 +58,25 @@ export const ShortLived: FC<Props> = ({
 
   // manage delayedOn state
   useEffect(() => {
-    if (on && delayStart < Infinity) {
-      const timer = setTimeout(() => {
-        setState(state => ({ ...state, delayedOn: true }));
-      }, delayStart);
-      return () => clearTimeout(timer);
-    } else if (!on && delayEnd < Infinity) {
-      const timer = setTimeout(() => {
-        setState(state => ({ ...state, delayedOn: false }));
-      }, delayEnd);
-      return () => clearTimeout(timer);
+    function handleDelay(delay: Delay, delayedOn: boolean) {
+      const setDelayOnState = () => {
+        setState(state => ({ ...state, delayedOn }));
+      };
+      if (delay < 0) {
+        setDelayOnState();
+        return undefined;
+      } else if (delay < Infinity) {
+        const timer = setTimeout(setDelayOnState, delay);
+        return () => clearTimeout(timer);
+      } else {
+        return undefined;
+      }
+    }
+
+    if (on) {
+      return handleDelay(delayStart, true);
     } else {
-      return undefined;
+      return handleDelay(delayEnd, false);
     }
   }, [on, delayStart, delayEnd]);
 
