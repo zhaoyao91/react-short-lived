@@ -1,5 +1,17 @@
 # react-short-lived
 
+## 0.4.0
+
+### Minor Changes
+
+- b5f6af2: batch update
+  - refactor: optimize inside logic
+  - feat: delayStart defaults to -1
+
+### Patch Changes
+
+- 3e6f009: refactor: optimize how to maintain version
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,7 +1,7 @@
 {
   "name": "react-short-lived",
   "description": "Help maintain short-lived React component.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "zhaoyao91",
   "main": "dist/index.js",
   "module": "dist/react-short-lived.esm.js",
