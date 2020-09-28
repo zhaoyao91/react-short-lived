@@ -40,7 +40,7 @@ export const ShortLived: FC<Props> = ({
   useEffect(() => {
     if (on) {
       setState({
-        // version is not a dep, it should only take effect when on turns true
+        // version is not a dep
         version,
         on: true,
         delayedOn: false,
@@ -50,6 +50,11 @@ export const ShortLived: FC<Props> = ({
       setState(state => ({ ...state, on: false }));
     }
   }, [on]);
+
+  // sync version
+  useEffect(() => {
+    setState(state => ({ ...state, version }));
+  }, [version]);
 
   // manage delayedOn state
   useEffect(() => {
