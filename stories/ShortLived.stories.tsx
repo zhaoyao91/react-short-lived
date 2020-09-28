@@ -52,7 +52,7 @@ const Demo = ({ alive, kill, setOn }: any) => {
       <button
         onClick={() => {
           setOn(false);
-          setTimeout(kill, 500);
+          kill();
         }}
       >
         close

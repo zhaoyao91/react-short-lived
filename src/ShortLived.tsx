@@ -1,97 +1,45 @@
-import React, {
-  FC,
-  memo,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, memo, ReactElement, useCallback, useState } from 'react';
+import { useOnVersion } from './hooks/use-on-version';
+import { MS, useTimeout } from './hooks/use-timeout';
 
-type Delay = number;
+type Version = string | number;
 
 type Props = {
   on?: boolean;
-  delayStart?: Delay;
-  delayEnd?: Delay;
+  delayStart?: MS;
+  delayEnd?: MS;
   render?: (alive: boolean, kill: () => void) => ReactElement;
-  version?: number | string;
+  version?: Version;
 };
 
 export const ShortLived: FC<Props> = ({
   on = false,
-  delayStart = 0,
+  delayStart = -1,
   delayEnd = 1000,
   render,
   version: userVersion,
 }) => {
-  const innerVersion = useVersion(on);
+  const innerVersion = useOnVersion(on);
   const version = getVersion(userVersion, innerVersion);
+  const firstVersion = innerVersion === 0;
 
-  // state bundle is bound to a version
-  const [state, setState] = useState({
+  const onDone = useTimeout(on ? delayStart : null);
+  const offDone = useTimeout(!on ? delayEnd : null);
+
+  const [killedVersion, setKilledVersion] = useState<Version | undefined>();
+  const kill = useCallback(() => setKilledVersion(version), [
     version,
-    on,
-    delayedOn: on,
-    killed: false,
-  });
+    setKilledVersion,
+  ]);
+  const killed = killedVersion === version;
 
-  // correctly turn on and off
-  useEffect(() => {
-    if (on) {
-      setState({
-        // version is not a dep
-        version,
-        on: true,
-        delayedOn: false,
-        killed: false,
-      });
-    } else {
-      setState(state => ({ ...state, on: false }));
-    }
-  }, [on]);
-
-  // sync version
-  useEffect(() => {
-    setState(state => ({ ...state, version }));
-  }, [version]);
-
-  // manage delayedOn state
-  useEffect(() => {
-    function handleDelay(delay: Delay, delayedOn: boolean) {
-      const setDelayOnState = () => {
-        setState(state => ({ ...state, delayedOn }));
-      };
-      if (delay < 0) {
-        setDelayOnState();
-        return undefined;
-      } else if (delay < Infinity) {
-        const timer = setTimeout(setDelayOnState, delay);
-        return () => clearTimeout(timer);
-      } else {
-        return undefined;
-      }
-    }
-
-    if (on) {
-      return handleDelay(delayStart, true);
-    } else {
-      return handleDelay(delayEnd, false);
-    }
-  }, [on, delayStart, delayEnd]);
-
-  const kill = useCallback(
-    () => setState(state => ({ ...state, killed: true })),
-    [setState]
-  );
-
-  const living = (state.on || state.delayedOn) && !state.killed;
-  const alive = living && state.on && state.delayedOn;
+  const living = !killed && (on || (!firstVersion && !offDone));
+  const alive = living && on && (firstVersion || onDone);
 
   if (living) {
     return (
       <ShortLivedRenderer
-        key={state.version}
+        key={version}
         alive={alive}
         kill={kill}
         render={render}
@@ -106,31 +54,8 @@ const ShortLivedRenderer = memo(({ alive, kill, render }: any) => {
   return render?.(alive, kill) ?? null;
 });
 
-function getVersion(
-  userVersion?: number | string,
-  innerVersion?: number | string
-) {
+// innerVersion is number and userVersion is `_` prefixed string so they will never collapse
+function getVersion(userVersion?: Version, innerVersion?: Version) {
   if (userVersion == null) return innerVersion;
   else return '_' + userVersion;
-}
-
-// keep a version which increases on each toggling to true of `on`
-function useVersion(on: boolean) {
-  const prevOnRef = useRef(on);
-  const prevVersionRef = useRef(0);
-
-  const turnedOn = !prevOnRef.current && on;
-  const version = turnedOn
-    ? prevVersionRef.current + 1
-    : prevVersionRef.current;
-
-  useEffect(() => {
-    prevOnRef.current = on;
-  }, [on]);
-
-  useEffect(() => {
-    prevVersionRef.current = version;
-  }, [version]);
-
-  return version;
 }
