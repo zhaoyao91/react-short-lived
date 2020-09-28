@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ShortLived } from '../src';
 
 export default {
@@ -8,17 +8,17 @@ export default {
 };
 
 export const demo = () => {
-  const [on, setLiving] = useState(false);
+  const [on, setOn] = useState(false);
 
   return (
     <div>
       <p>
         <button
           onClick={() => {
-            setLiving(x => !x);
+            setOn(x => !x);
           }}
         >
-          toggle living
+          toggle on
         </button>
       </p>
       <p>on: {String(on)}</p>
@@ -26,16 +26,22 @@ export const demo = () => {
         on={on}
         delayStart={500}
         delayEnd={1000}
-        render={alive => <Demo alive={alive} />}
+        render={(alive, kill) => {
+          return (
+            <div>
+              <p>alive: {String(alive)}</p>
+              <button
+                onClick={() => {
+                  setOn(false);
+                  setTimeout(kill, 500);
+                }}
+              >
+                close
+              </button>
+            </div>
+          );
+        }}
       />
     </div>
   );
-};
-
-const Demo = ({ alive }: any) => {
-  useEffect(() => {
-    console.log('mount');
-  }, []);
-
-  return <p>alive: {String(alive)}</p>;
 };
