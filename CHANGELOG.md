@@ -1,5 +1,11 @@
 # react-short-lived
 
+## 0.4.1
+
+### Patch Changes
+
+- 314d784: fix: fix timeout logic
+
 ## 0.4.0
 
 ### Minor Changes
