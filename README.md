@@ -2,6 +2,10 @@
 
 Help maintain short-lived React component.
 
+# Deprecated
+
+Please refer to [yao-react/react-short-life](https://github.com/yao-react/react-short-life)
+
 ## Motivation
 
 Some components, such as modal, pop menu and drawer, are short-lived, which means they may exist for long but will
