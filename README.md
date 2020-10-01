@@ -2,9 +2,9 @@
 
 Help maintain short-lived React component.
 
-# Deprecated
+## Deprecation
 
-Please refer to [yao-react/react-short-life](https://github.com/yao-react/react-short-life)
+This package is deprecated to prefer [@yao-react/react-short-life](https://github.com/yao-react/react-short-life).
 
 ## Motivation
 
